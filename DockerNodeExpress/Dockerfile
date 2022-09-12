@@ -3,5 +3,6 @@ WORKDIR /app
 COPY package.json .
 RUN yarn install
 COPY . .
-EXPOSE 3000
-CMD ["node" "index.js"]
+ENV PORT 3000
+EXPOSE $PORT
+CMD ["yarn", "dev"]
