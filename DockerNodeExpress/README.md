@@ -179,6 +179,10 @@ ___or___
 docker run -d -p 3000:3000 -v $(pwd):/app your_image_name
 ```
 
+💁‍♂️ __TIP__: Deleting Volumes 
+
+To prevent volumes from building up. Use this command `-fv` when deleting the container or we can use the `docker volume prune`.
+
 ### __Prevent overriding specific files using volumes__
 
 In this case, when using volumes to prevent from overriding certain files we want to use `anonomyous volumes` 
@@ -212,3 +216,43 @@ docker run -d -p 3000:3000 -v $(pwd):/app:ro -v /app/node_modules example_image
 <hr />
 
 ### __Envirnoment Variables__
+
+#### Adding envirnoment variables to the container. To do this, use the terminal to run the command. 
+
+- The example below shows how to add an PORT env to the container.
+
+__Example__:
+
+```bash
+docker run -d -p 3000:4000 --env PORT=4000 --name try-container try-env-image
+```
+
+#### Adding envirnoment variables using an `.env` file
+
+1. Create a dotenv file
+2. Add those VARS to the file like this: `PORT=4000`
+3. Add this command `--env-file` followed by the path to the file: `--env-file ./.env`
+<hr />
+
+### __Docker Compose__
+
+The docker compose file is used to place the commands in a single location
+
+1. Create the `docker-compose.yml` file
+2. In the file, set the `version` of docker-compose we would like to use.
+3. Set the list of containers under the `services` command
+    - Under services add your container name
+4. Under the container name add the attributes needed for the container
+    ```yaml
+    node-app:
+        build: .
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./:/app:ro
+            - /app/node_modules
+        # environment:
+        #   - PORT=3000
+        env_file:
+            - ./.env
+    ```
