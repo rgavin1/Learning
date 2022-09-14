@@ -256,3 +256,30 @@ The docker compose file is used to place the commands in a single location
         env_file:
             - ./.env
     ```
+
+
+### __Create and Start containers using the command using the docker-compose file__:
+    
+```bash
+docker-compose up -d
+```
+TIP 💁‍♂️: Remember the `-d` is for detaching the local terminal from the container terminal.
+
+### __Tearing down using docker-compose__:
+
+```bash
+docker-compose down -v
+```
+TIP 💁‍♂️: Remember the `-v` is for removing created volumes.
+
+### __Create and Start `Dev` environment using the `docker-compose.dev.yml`__
+
+Following the command below
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
+__TIP__ 💁‍♂️: The `-f` flag represents the file path.
+
+__TIP__ 💁‍♂️: Use the `--build` flag to force a build on the docker container
