@@ -8,7 +8,12 @@ services:
       - PORT=3000
 
   mongo:
-    image: mongo
+    image: mongo:5.0
     environment:
       - MONGO_INITDB_ROOT_USERNAME=value
       - MONGO_INITDB_ROOT_PASSWORD=value
+    volumes:
+      - mongo-db:/data/db
+
+volumes:
+  mongo-db:

@@ -197,6 +197,25 @@ __Example__:
 docker run -d -p 3000:3000 -v $(pwd):/app -v /app/node_modules example_image
 ```
 
+### __Named volumes__
+
+In the docker-compose.yml, using the form storage is best for storing database items.
+
+```docker
+  # docker-compose.yml
+
+  mongo:
+    image: mongo:5.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=value
+      - MONGO_INITDB_ROOT_PASSWORD=value
+    volumes:
+      - mongo-db:/data/db
+
+volumes:
+  mongo-db:
+```
+
 <hr />
 
 ### __Docker Container logs__
@@ -281,5 +300,31 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
 __TIP__ 💁‍♂️: The `-f` flag represents the file path.
-
 __TIP__ 💁‍♂️: Use the `--build` flag to force a build on the docker container
+
+<hr />
+
+### __Inspecting the Container__
+
+```docker
+docker inspect your_docker_container_name
+```
+
+### __Viewing the Container's Network__
+
+__Syntex__
+
+```docker
+docker network ls
+```
+
+__Example__
+
+```bash
+NETWORK ID     NAME                        DRIVER    SCOPE
+b43a3164bf80   bridge                      bridge    local
+54af2345ecdb   dockernodeexpress_default   bridge    local
+f483b0310700   host                        host      local
+feee07675b27   none                        null      local
+```
+
