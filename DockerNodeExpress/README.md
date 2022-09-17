@@ -1,6 +1,10 @@
 # Learn Docker - DevOps with Node.js & Express
 Reference: [freecodecamp.com on Youtube](https://www.youtube.com/watch?v=9zUHg7xjIqQ&t=7539s)
 
+### __MISC__
+
+- Password Hashing - `yarn add bcryptjs`
+
 ### Questions :question:
 
 - What is Docker :whale::question:
@@ -328,3 +332,15 @@ f483b0310700   host                        host      local
 feee07675b27   none                        null      local
 ```
 
+<hr />
+
+### __Start Container's In a specific order__
+
+Since I know the node application has to point to a database for it work. I would need to set the order in which they start up. This is where the `depends_on` command comes into use. In the `docker-compose` file use this command and in a list add the app name it is depended on.
+
+```docker 
+your_app:
+  ...
+  depends_on:
+    - application_name
+```

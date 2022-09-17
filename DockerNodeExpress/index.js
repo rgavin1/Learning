@@ -1,16 +1,64 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const {
+  MONGO_USER,
+  MONGO_PASSWORD,
+  MONGO_PORT,
+  MONGO_IP,
+} = require("./config/config");
+
+/**
+ * Routes:
+ *  - Posts
+ *  - Users (Auth)
+ */
+const postRouter = require("./routes/postRoutes")
+const userRouter = require("./routes/userRoutes");
+
 
 const app = express();
 
-mongoose
-  .connect("mongodb://value:value@mongo:27017/?authSource=admin")
-  .then(() => console.log("successfully connected to db"))
-  .catch((e) => console.log(e));
+const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`;
+
+/**
+ * This may not be best practice. Let's say the connection
+ * to the mongo database via mongoose fails. How are we going to
+ * handle this disaster? Oh! :wave I know, use a setTimeout function
+ * to attempt again after 5 seconds.
+ *
+ *
+ */
+const connectionWithRetry = () => {
+  mongoose
+    .connect(mongoURL)
+    .then(() => console.log("successfully connected to db"))
+    .catch((e) => {
+      console.log(e);
+      // attempt another connection after 5 seconds
+      setTimeout(connectionWithRetry, 5000);
+    });
+};
+
+connectionWithRetry();
+
+/**
+ * Middleware:
+ *  - The express.json allows the req.body to be
+ *    used in the request. 
+ */
+app.use(express.json())
 
 app.get("/", (req, res) => {
   res.send("<h2>Hey Ramsey!</h2>");
 });
+
+/**
+ * :orange_book: Note: Best Practice by prefixing the route
+ * with `/api/v#/`. Sticking the script :100:
+ * 
+ */
+app.use("/api/v1/posts", postRouter);
+app.use("/api/v1/users", userRouter);
 
 const PORT = process.env.PORT || 3000;
 
