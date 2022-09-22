@@ -12,6 +12,7 @@ services:
       - NODE_ENV=development
       - MONGO_USER=value
       - MONGO_PASSWORD=value
+      - SESSION_SECRET=secret
     command: yarn dev
 
   mongo:

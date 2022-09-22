@@ -1,20 +1,32 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const redis = require("redis");
+
+const session = require("express-session");
+let RedisStore = require("connect-redis")(session);
+
 const {
   MONGO_USER,
   MONGO_PASSWORD,
   MONGO_PORT,
   MONGO_IP,
+  REDIS_URL,
+  REDIS_PORT,
+  SESSION_SECRET,
 } = require("./config/config");
+
+let redisClient = redis.createClient({
+  host: REDIS_URL,
+  port: REDIS_PORT,
+});
 
 /**
  * Routes:
  *  - Posts
  *  - Users (Auth)
  */
-const postRouter = require("./routes/postRoutes")
+const postRouter = require("./routes/postRoutes");
 const userRouter = require("./routes/userRoutes");
-
 
 const app = express();
 
@@ -44,9 +56,25 @@ connectionWithRetry();
 /**
  * Middleware:
  *  - The express.json allows the req.body to be
- *    used in the request. 
+ *    used in the request.
  */
-app.use(express.json())
+app.use(express.json());
+/**
+ * This Redis middleware is used to create session cookies
+ */
+app.use(
+  session({
+    store: new RedisStore({ client: redisClient }),
+    secret: SESSION_SECRET,
+    cookie: {
+      secure: false,
+      resave: false,
+      saveUninitialized: false,
+      httpOnly: true,
+      maxAge: 3000000,
+    },
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("<h2>Hey Ramsey!</h2>");
