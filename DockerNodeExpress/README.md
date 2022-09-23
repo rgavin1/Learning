@@ -344,3 +344,75 @@ your_app:
   depends_on:
     - application_name
 ```
+
+# Deploying a Docker Container to Ubuntu(Digital Ocean)
+
+1. Create a droplet
+
+2. Use the command ssh 
+```bash
+ssh root@IPv4 # example: root@111.000.222.55
+```
+
+3. Fetch docker using the `get.docker.com` site which has a script.
+
+```bash 
+curl -fsSL https://get.docker.com -o get-docker.sh
+```
+
+4. Use this line to from the script to install docker
+
+```bash
+sh get-docker.sh
+```
+
+__TIP:__ Confirm docker is installed 
+
+```bash
+docker --version
+```
+
+5. Run this command to download the latest version of Docker Compose:
+
+```bash
+$ sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+```
+
+6. Apply executable permissions to the binary:
+
+```bash
+$ sudo chmod +x /usr/local/bin/docker-compose
+```
+
+7. Test the installation
+
+```bash
+$ docker-compose -v
+```
+
+8. Install Environment Variable to server
+
+```bash
+export VAR_NAME
+```
+
+9. Create a dotenv file using the command 
+
+```bash
+vi .env
+```
+
+10. Install all production env variables
+
+11. Go into the `.profile` using the command
+
+```bash
+vi .profile
+```
+12. Use this script to loop through and the variables
+
+```bash
+set -o allexport; source /root/.env; set +o allexport;
+```
+
+__TIP__: Restart the terminal and verifiy the Variables are set by running the `printenv` 
