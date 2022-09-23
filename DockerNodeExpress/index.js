@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const redis = require("redis");
@@ -15,10 +16,33 @@ const {
   SESSION_SECRET,
 } = require("./config/config");
 
-let redisClient = redis.createClient({
-  host: REDIS_URL,
-  port: REDIS_PORT,
-});
+let redisClient;
+
+(async () => {
+  try {
+    redisClient = redis.createClient({
+      // Ran into 504 error: This is the solution
+      url: "redis://redis:6379",
+      // socket: { port: 6379 },
+      // host: REDIS_URL,
+      // port: REDIS_PORT,
+      legacyMode: true,
+    });
+    await redisClient.connect();
+    console.log("");
+    console.error(
+      "****************************************************\n",
+      " ----------------  CONNECTED -------------------------",
+      "\n****************************************************"
+    );
+  } catch (err) {
+    console.error(
+      "****************************************************\n",
+      err,
+      "\n****************************************************"
+    );
+  }
+})();
 
 /**
  * Routes:
@@ -59,6 +83,8 @@ connectionWithRetry();
  *    used in the request.
  */
 app.use(express.json());
+app.use(cors({}));
+app.enable("trust proxy");
 /**
  * This Redis middleware is used to create session cookies
  */
@@ -76,14 +102,15 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
+app.get("/api/v1/", (req, res) => {
   res.send("<h2>Hey Ramsey!</h2>");
+  console.log("yeah it ran");
 });
 
 /**
  * :orange_book: Note: Best Practice by prefixing the route
  * with `/api/v#/`. Sticking the script :100:
- * 
+ *
  */
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/users", userRouter);
