@@ -344,6 +344,13 @@ your_app:
   depends_on:
     - application_name
 ```
+<hr />
+
+### __Rename Image__
+
+```bash
+docker image tag CURR_DOCKER_IMAGE_NAME USERNAME/APP_NAME
+```
 
 # Deploying a Docker Container to Ubuntu(Digital Ocean)
 
