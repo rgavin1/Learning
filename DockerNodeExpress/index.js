@@ -103,7 +103,9 @@ app.use(
 );
 
 app.get("/api/v1/", (req, res) => {
-  res.send("<h2>Hey Ramsey | Created Custom Docker Image</h2>");
+  res.send(
+    "<h2>Hey Ramsey | Created Custom Docker Image | You now have a tool to watch changes to your docker image on Github</h2>"
+  );
   console.log("yeah it ran");
 });
 
